@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png">
+
+    <title>Airena</title>
+
+    <link href="css/style.default.css" rel="stylesheet">
+    <link href="{{ asset('/css/jquery.datatables.css')}}" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body class="horizontal-menu">
+
+<!-- Preloader -->
+<div id="preloader">
+    <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
+</div>
+
+<section>
+
+
+
+<div class="mainpanel">
+
+<div class="headerbar">
+
+<div class="header-left">
+
+    <div class="logopanel">
+        <h1>Airena</h1>
+    </div><!-- logopanel -->
+
+    <div class="topnav">
+        <a class="menutoggle"><i class="fa fa-bars"></i></a>
+
+        <ul class="nav nav-horizontal">
+            <li class="active"><a href="{{ path('sitereservation_homepage') }}"><i class="glyphicon glyphicon-plane"></i> <span>Vols</span></a></li>
+            {% if is_granted("ROLE_PASSAGER") %}
+            <li><a href="{{ path('sitereservation_mesreservation') }}"><span class="pull-right badge badge-success">{{ nbvalide }}</span><i class="fa fa-plane"></i> <span>Mes Vols</span></a></li>
+            <li><a href="{{ path('sitereservation_profile') }}"><i class="glyphicon glyphicon-user"></i> <span>Mon Profile</span></a></li>
+            <li><a href="{{ path('sitereservation_logout') }}"><i class="glyphicon glyphicon-share-alt"></i> <span>Déconnection</span></a></li>
+            {% endif %}
+        </ul>
+    </div><!-- topnav -->
+
+</div><!-- header-left -->
+
+
+
+</div><!-- headerbar -->
+
+
+
+<div class="contentpanel">
+    <!-- content goes here... -->
+
+    <div class="row">
+
+        {% if is_granted("ROLE_PASSAGER") %}
+        <div class="col-sm-12 col-md-12">
+            {% else %}
+            <div class="col-sm-8 col-md-9">
+        {% endif %}
+
+
+
+
+
+
+                <div class="table-responsive dashboard-datatable"">
+                    <table class="table" id="table1">
+                        <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Heure</th>
+                            <th>Durees</th>
+                            <th>destination</th>
+                            {% if is_granted("ROLE_PASSAGER") %}
+                            <th></th>
+                            {% endif %}
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {% for a in vols %}
+                            <tr class="odd ">
+                                <td>{{ a.date|date('Y-m-d') }}</td>
+                                <td>{{ a.heure|date('H:i') }}</td>
+                                <td>{{ a.duree }}</td>
+                                <td>{{ a.destination }}</td>
+
+                                {% if is_granted("ROLE_PASSAGER") %}
+                                <td><a href="{{ path('sitereservation_reserver',{'id':a.id}) }}"><span class="glyphicon glyphicon-check"></span>Reserver</a></td>
+                                {% endif %}
+                            </tr>
+
+                        {% endfor %}
+
+
+
+
+                        </tbody>
+                    </table>
+                </div><!-- table-responsive -->
+
+
+
+
+
+            {#</div>#}
+        </div>
+    {% if is_granted("ROLE_PASSAGER") == false %}
+
+        <div class="col-sm-4 col-md-3">
+            <div class="panel panel-default">
+
+
+                <!-- <div class="panel-body"> -->
+
+
+
+                    <ul class="nav nav-tabs nav-justified">
+                        <li class="active"><a href="#connecter" data-toggle="tab"><i class="glyphicon glyphicon-log-in"></i> <strong>Connecter</strong></a></li>
+                        <li><a href="#inscri" data-toggle="tab"><i class="fa  fa-pencil"></i> <strong>Inscription</strong></a></li>
+                    </ul>
+
+
+
+                    <div class="tab-content">
+                        <div id="connecter" class="tab-pane active">
+
+                            <form action="{{ path("fos_user_security_check") }}" method="post">
+
+
+
+
+
+                                Connecter Pour reserver
+                                <input type="text" id="username" name="_username" required="required"  class="form-control mt10 mb10" placeholder="Nom d'utilisateur" />
+                                <input type="password" id="password" name="_password" required="required" class="form-control mb10" placeholder="Mot de passe" />
+                                <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+
+                                <input type="submit" class="btn btn-default btn-block" id="_submit" name="_submit" value="Connecter" />
+                            </form>
+
+                        </div>
+                        <div id="inscri" class="tab-pane">
+
+
+                            <form action="{{ path('sitereservation_inscri') }}" method="post">
+
+
+
+                                <input type="text" id="action_nom" name="nom" required="required" placeholder="Nom" class="form-control mt10 mb10">
+
+                                <input type="text" id="action_nom" name="prenom" required="required" placeholder="Prenom" class="form-control mt10 mb10">
+
+
+
+                                <select id="action_sexe" name="sexe" class="form-control mt10 mb10 input-sm mb15">
+                                    <option value="F">Féminin</option>
+                                    <option value="M">Masculin</option></select>
+
+
+                                    <input type="text" id="dateNaissance" name="dateNaissance" required="required" class="form-control mt10 mb10" placeholder="Date de naissance">
+
+
+                                <input type="text" id="action_nom" name="username" required="required" placeholder="Nom d'utilisateur" class="form-control mt10 mb10">
+
+                                <input type="email" id="action_nom" name="email" required="required" placeholder="email" class="form-control mt10 mb10">
+
+                                <input type="password" id="action_nom" name="password" required="required" placeholder="Mot de passe" class="form-control mt10 mb10">
+
+                                <input type="submit" class="btn btn-default btn-block" id="_submit" name="_submit" value="Inscrire" />
+
+                            </form>
+
+
+
+
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    {% endif %}
+    </div>
+
+
+
+</div>
+
+</div><!-- mainpanel -->
+
+
+
+
+</section>
+
+
+
+<script src="js/jquery-1.10.2.min.js"></script>
+<script src="js/jquery-migrate-1.2.1.min.js"></script>
+<script src="/js/jquery-ui-1.10.3.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/modernizr.min.js"></script>
+<script src="js/jquery.sparkline.min.js"></script>
+<script src="js/toggles.min.js"></script>
+<script src="js/retina.min.js"></script>
+<script src="js/jquery.cookies.js"></script>
+
+<script src="/js/jquery.datatables.min.js"></script>
+
+<script src="js/custom.js"></script>
+
+
+<script>
+
+    jQuery(document).ready(function() {
+
+
+        jQuery('#dateNaissance').datepicker();
+
+        jQuery('#table1').dataTable({
+                "aoColumnDefs": [
+                    { "bSortable": false, "aTargets": [ 4 ] }
+                ],
+            "bLengthChange": false,
+            "oLanguage": {
+                "oPaginate": {
+                    "sNext": "Suivant",
+                    "sPrevious":"Précédent",
+                    "sSearch": "Chercher:",
+                    "sLengthMenu": "Afficher _MENU_",
+                    "sInfo": "De _START_ to _END_ à _TOTAL_ records",
+                }
+            }
+        });
+
+
+    });
+</script>
+
+</body>
+</html>

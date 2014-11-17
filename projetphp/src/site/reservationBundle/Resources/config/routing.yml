@@ -1,0 +1,34 @@
+sitereservation_homepage:
+    pattern:  /
+    defaults: { _controller: sitereservationBundle:Default:index }
+sitereservation_reserver:
+    pattern:  /reserver/{id}
+    defaults: { _controller: sitereservationBundle:Default:reserver }
+sitereservation_mesreservation:
+    pattern:  /mesreservations/
+    defaults: { _controller: sitereservationBundle:Default:mesreservation }
+sitereservation_profile:
+    pattern:  /profile/
+    defaults: { _controller: sitereservationBundle:Profile:profile }
+sitereservation_profile_pass:
+    pattern: /profile/motdepasse
+    defaults: { _controller: FOSUserBundle:ChangePassword:changePassword }
+sitereservation_reservation_pdf:
+    pattern: /mesreservations/pdf/{id}
+    defaults: { _controller: sitereservationBundle:Default:generatePDF }
+sitereservation_inscri:
+    pattern: /inscription
+    defaults: { _controller : sitereservationBundle:Default:inscri}
+
+
+
+sitereservation_logout:
+    pattern: /logout
+    defaults : { _controller:  sitereservationBundle:Login:logout}
+
+logincheck:
+    pattern: /login-check
+    defaults: { _controller: sitereservationBundle:Login:checklogin}
+loginredirect:
+    pattern: /login-redirect
+    defaults: { _controller: sitereservationBundle:Login:loginRediraction}
